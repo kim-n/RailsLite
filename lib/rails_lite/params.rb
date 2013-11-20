@@ -2,7 +2,7 @@ require 'uri'
 
 class Params
   def initialize(req, route_params)
-    @params = {}
+    @params = HashWithIndifferentAccess.new
     if req.query_string
       @params.merge!( parse_www_encoded_form(req.query_string) )
     end
@@ -22,8 +22,7 @@ class Params
 
   def parse_www_encoded_form(www_encoded_form)
     query_pairs = URI.decode_www_form(www_encoded_form)
-    p query_pairs
-    new_params = {}
+    new_params = HashWithIndifferentAccess.new
       query_pairs.each do |key, value|
       keys_array = parse_key(key) #["cat", "name"]
 
@@ -33,7 +32,7 @@ class Params
         if( (index+1) == keys_array.count)
           current_hash[hash_key] = value
         else
-          current_hash[hash_key] ||= {}
+          current_hash[hash_key] ||= HashWithIndifferentAccess.new
           current_hash = current_hash[hash_key]
         end
       end

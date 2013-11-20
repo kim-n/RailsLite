@@ -6,18 +6,18 @@ class Route
     #   user              PUT           /users/:id      users#update
     #   user             :put           /users/:id      users#update
 
-    @pattern = patterm
+    @pattern = pattern
     @http_method = http_method
     @controller_class = controller_class
     @action_name = action_name
   end
 
   def matches?(req)
-    http_method == req.request_method.downcase.to_sym
+    (http_method == req.request_method.downcase.to_sym) && ( @pattern.match(req.path ) )
   end
 
   def run(req, res)
-     ControllerBase.new(req,res).invoke_action(@action_name)
+     @controller_class.new(req,res).invoke_action(@action_name)
   end
 end
 
@@ -37,6 +37,7 @@ class Router
   end
 
   def draw(&proc)
+    self.instance_eval(&proc)
   end
 
   # add a Route object to the Router's @routes instance variable.

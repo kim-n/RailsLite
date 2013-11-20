@@ -46,6 +46,8 @@ class ControllerBase
 
   def invoke_action(name)
     self.send(name)
+    # @response.body = @request.path
+
     render(name) unless already_rendered?
   end
 end

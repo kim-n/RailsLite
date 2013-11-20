@@ -17,7 +17,9 @@ class Route
   end
 
   def run(req, res)
-     @controller_class.new(req,res).invoke_action(@action_name)
+    matches = @pattern.match(req.path)
+    route_params = matches.names.map{|name| "#{name}=#{matches[name]}" }.join("&")
+    @controller_class.new(req,res, route_params ).invoke_action(@action_name)
   end
 end
 

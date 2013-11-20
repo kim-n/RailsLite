@@ -3,6 +3,9 @@ require 'uri'
 class Params
   def initialize(req, route_params)
     @params = HashWithIndifferentAccess.new
+    if route_params
+      @params.merge!( parse_www_encoded_form(route_params) )
+    end
     if req.query_string
       @params.merge!( parse_www_encoded_form(req.query_string) )
     end

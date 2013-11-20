@@ -6,7 +6,7 @@ require 'active_support/core_ext'
 class ControllerBase
   attr_reader :params
 
-  def initialize(req, res, route_params = '/')
+  def initialize(req, res, route_params = nil)
     @request = req
     @response = res
     @params = Params.new(@request, route_params)

@@ -51,6 +51,16 @@ class Router
     @routes.find { |route| route.matches?(req) }
   end
 
+  # figure out what URL was requested,
+  # match it to the URL regex of one Route object, and
+  # finally ask the Route to instantiate the appropriate controller,
+  # and call the approriate method.
   def run(req, res)
+    route = match(req)
+    if route
+      route.run(req, res)
+    else
+      res.status = "404"
+    end
   end
 end
